@@ -8,10 +8,12 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -19,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -111,6 +114,7 @@ fun MainHeader(navController: NavHostController, currentRoute: String?) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainBottomBar(navController: NavHostController, currentRoute: String?) {
     val bottomNavigationItems = listOf(
@@ -121,37 +125,42 @@ fun MainBottomBar(navController: NavHostController, currentRoute: String?) {
         MainNav.My,
     )
 
-    NavigationBar(
-        containerColor = Color.White,
-        contentColor = Color.Black
+    // ripple 효과 제거
+    CompositionLocalProvider(
+        LocalRippleConfiguration provides RippleConfiguration(isEnabled = false)
     ) {
-        bottomNavigationItems.forEach { item ->
-            NavigationBarItem(
-                label = {
-                    Text(text = item.label)
-                },
-                selected = currentRoute == item.route,
-                onClick = {
-                    NavigationUtils.navigate(
-                        navController, item.route,
-                        navController.graph.startDestinationRoute
+        NavigationBar(
+            containerColor = Color.White,
+            contentColor = Color.Black
+        ) {
+            bottomNavigationItems.forEach { item ->
+                NavigationBarItem(
+                    label = {
+                        Text(text = item.label)
+                    },
+                    selected = currentRoute == item.route,
+                    onClick = {
+                        NavigationUtils.navigate(
+                            navController, item.route,
+                            navController.graph.startDestinationRoute
+                        )
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = "icon",
+                            modifier = Modifier.width(28.dp)
+                        )
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = HambugRed,
+                        selectedTextColor = HambugRed,
+                        unselectedIconColor = Color.Black,
+                        unselectedTextColor = Color.Black,
+                        indicatorColor = Color.White
                     )
-                },
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = "icon",
-                        modifier = Modifier.width(28.dp)
-                    )
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = HambugRed,
-                    selectedTextColor = HambugRed,
-                    unselectedIconColor = Color.Black,
-                    unselectedTextColor = Color.Black,
-                    indicatorColor = Color.White
                 )
-            )
+            }
         }
     }
 }
