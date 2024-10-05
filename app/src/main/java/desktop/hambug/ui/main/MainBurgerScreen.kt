@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import desktop.hambug.R
+import desktop.hambug.ui.theme.preBoldTitle3
 
 @Composable
 fun MainBurgerScreen(navController: NavHostController) {
@@ -44,7 +45,8 @@ fun MainBurgerScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "프랜차이즈 버거 정보"
+                text = "프랜차이즈 버거 정보",
+                style = preBoldTitle3
             )
 
             Spacer(modifier = Modifier.height(16.dp))
