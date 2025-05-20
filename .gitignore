@@ -1,0 +1,26 @@
+# Gradle 관련 무시
+.gradle/
+build/
+**/build/
+
+# IDE 관련 무시
+.idea/
+*.iml
+
+# 로컬 환경 파일 무시
+local.properties
+
+# Android Studio 캐시
+captures/
+
+# Kotlin/Java 컴파일 결과
+*.class
+
+# macOS 관련
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# 로그 파일
+*.log
