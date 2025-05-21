@@ -46,12 +46,14 @@ dependencies {
 
     // navigation compose
     implementation(libs.androidx.navigation.compose)
-
     // hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.androidx.hilt.compiler)
+    // retrofit
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.gson)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
