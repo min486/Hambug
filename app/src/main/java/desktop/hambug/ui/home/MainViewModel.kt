@@ -1,19 +1,29 @@
 package desktop.hambug.ui.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import desktop.hambug.repository.HambugRepository
+import desktop.hambug.data.DataOrException
+import desktop.hambug.model.FranchiseItem
 import desktop.hambug.repository.MainRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: MainRepository,
-    private val hambugRepo: HambugRepository
+    private val repository: MainRepository
 ) : ViewModel() {
+
+    private val _franchiseState = MutableStateFlow(
+        DataOrException<List<FranchiseItem>, Boolean, Exception>(
+            data = null,
+            loading = true,
+            e = null
+        )
+    )
+    val franchiseState: StateFlow<DataOrException<List<FranchiseItem>, Boolean, Exception>> = _franchiseState
 
     init {
         getData()
@@ -21,14 +31,8 @@ class MainViewModel @Inject constructor(
 
     private fun getData() {
         viewModelScope.launch {
-            try {
-                val response = hambugRepo.getFranchise()
-                Log.d("MainViewModel", "데이터 수신 성공 : ${response.franchise}")
-            } catch (e: Exception) {
-                Log.d("MainViewModel", "데이터 수신 실패 : ${e.message}")
-            }
+            val response = repository.getAllFranchise()
+            _franchiseState.value = response
         }
     }
-
-    val message: String = repository.getMessage()
 }
